@@ -2,10 +2,10 @@ name: microservices-ci
 on:
   push:
     paths:
-      - 'sample-microservices-node/**'
+      - 'node-example-microservices/**'
   pull_request:
     paths:
-      - 'sample-microservices-node/**'
+      - 'node-example-microservices/**'
 
 jobs:
   build:
