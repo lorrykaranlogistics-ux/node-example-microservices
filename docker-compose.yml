@@ -1,0 +1,37 @@
+version: '3.9'
+services:
+  user-service:
+    build: ./user-service
+    container_name: user-service
+    ports:
+      - "3001:3001"
+
+  payment-service:
+    build: ./payment-service
+    container_name: payment-service
+    ports:
+      - "3003:3003"
+
+  notification-service:
+    build: ./notification-service
+    container_name: notification-service
+    ports:
+      - "3004:3004"
+
+  order-service:
+    build: ./order-service
+    container_name: order-service
+    ports:
+      - "3002:3002"
+    depends_on:
+      - user-service
+      - payment-service
+      - notification-service
+
+  api-gateway:
+    build: ./api-gateway
+    container_name: api-gateway
+    ports:
+      - "3000:3000"
+    depends_on:
+      - order-service

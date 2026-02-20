@@ -1,0 +1,22 @@
+name: microservices-ci
+on:
+  push:
+    paths:
+      - 'sample-microservices-node/**'
+  pull_request:
+    paths:
+      - 'sample-microservices-node/**'
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        service: [api-gateway, user-service, order-service, payment-service, notification-service]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+      - run: cd sample-microservices-node/${{ matrix.service }} && npm install
+      - run: cd sample-microservices-node/${{ matrix.service }} && node -e "require('./src/server.js'); setTimeout(()=>process.exit(0),200)"

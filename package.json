@@ -1,0 +1,12 @@
+{
+  "name": "sample-microservices-node",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "start:user": "node user-service/src/server.js",
+    "start:order": "node order-service/src/server.js",
+    "start:payment": "node payment-service/src/server.js",
+    "start:notification": "node notification-service/src/server.js",
+    "start:gateway": "node api-gateway/src/server.js"
+  }
+}

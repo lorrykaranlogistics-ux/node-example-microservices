@@ -1,0 +1,42 @@
+diff --git a/payment-service/src/utils/paymentValidator.js b/payment-service/src/utils/paymentValidator.js
+index 0000000..1111111 100644
+--- a/payment-service/src/utils/paymentValidator.js
++++ b/payment-service/src/utils/paymentValidator.js
+@@ -1,12 +1,19 @@
+ const { normalizeAmount } = require('../../../shared/money');
+ 
+ const validatePayment = ({ cardNumber, amount, currency }) => {
+-  if (!cardNumber || String(cardNumber).length < 10) {
++  if (!cardNumber || String(cardNumber).length < 12) {
+     throw new Error('Invalid card number');
+   }
+ 
+   const parsedAmount = normalizeAmount(amount);
+   if (Number.isNaN(parsedAmount) || parsedAmount <= 0) {
+     throw new Error('Invalid amount');
+   }
++
++  if (!['USD', 'EUR', 'INR'].includes(currency)) {
++    throw new Error('Unsupported currency');
++  }
+ 
+   return { parsedAmount };
+ };
+diff --git a/shared/money.js b/shared/money.js
+index 2222222..3333333 100644
+--- a/shared/money.js
++++ b/shared/money.js
+@@ -1 +1 @@
+-const normalizeAmount = (amount) => Number(amount);
++const normalizeAmount = (amount) => Math.round(Number(amount) * 100) / 100;
+diff --git a/order-service/src/models/orderModel.js b/order-service/src/models/orderModel.js
+index 4444444..5555555 100644
+--- a/order-service/src/models/orderModel.js
++++ b/order-service/src/models/orderModel.js
+@@ -5,6 +5,7 @@ const createOrder = (orderInput) => {
+     amount: orderInput.amount,
+     currency: orderInput.currency,
+     paymentId: orderInput.paymentId,
++    transactionRef: orderInput.transactionRef || null,
+     status: 'CONFIRMED',
+   };

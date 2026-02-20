@@ -1,0 +1,3 @@
+feat(payment): strengthen validation and add currency checks
+refactor(shared): normalize money formatting
+feat(order): persist transactionRef in order schema
