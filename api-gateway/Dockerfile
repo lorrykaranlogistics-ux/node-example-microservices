@@ -1,7 +1,9 @@
 FROM node:20-alpine
 WORKDIR /app
-COPY package.json ./
+ENV NODE_PATH=/app/node_modules
+COPY api-gateway/package.json ./package.json
 RUN npm install
-COPY src ./src
+COPY api-gateway/src ./src
+COPY shared /shared
 EXPOSE 3000
 CMD ["npm", "start"]
