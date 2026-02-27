@@ -9,3 +9,9 @@ This folder simulates a pull request containing:
 Files:
 - `pr-24.patch`
 - `commit-message.txt`
+
+Use this with analyze API as:
+
+```json
+{"pr_number": 24}
+```
