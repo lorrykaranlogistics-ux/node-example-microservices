@@ -15,6 +15,7 @@ const createOrder = (orderInput) => {
 };
 
 const listOrders = () => orders;
+const listOrdersByUser = (userId) => orders.filter((o) => o.userId === userId);
 const findOrder = (id) => orders.find((o) => o.id === id);
 const updateOrderStatus = (id, status) => {
   const order = findOrder(id);
@@ -23,4 +24,4 @@ const updateOrderStatus = (id, status) => {
   return order;
 };
 
-module.exports = { createOrder, listOrders, findOrder, updateOrderStatus };
+module.exports = { createOrder, listOrders, listOrdersByUser, findOrder, updateOrderStatus };

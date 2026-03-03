@@ -34,6 +34,40 @@ curl -s -X POST http://localhost:3000/api/orders \
   -d '{"userId":"u1","cardNumber":"411111111111","amount":120.55,"currency":"USD"}'
 ```
 
+## Additional Routes
+
+### API Gateway (`:3000`)
+
+- `GET /api/orders`
+- `GET /api/orders/:id`
+- `GET /api/orders/user/:userId`
+- `POST /api/orders`
+- `PATCH /api/orders/:id/status`
+- `POST /api/orders/:id/cancel`
+- `GET /api/users`
+- `GET /api/users/:id`
+- `GET /api/users/tier/:tier`
+- `POST /api/users`
+- `GET /api/payments`
+- `GET /api/payments/:id`
+- `GET /api/payments/status/:status`
+- `POST /api/payments/:id/refund`
+- `GET /api/notifications`
+- `GET /api/notifications/:id`
+- `GET /api/notifications/user/:userId`
+- `GET /api/notifications/order/:orderId`
+
+### Service-Native Endpoints
+
+- `user-service :3001`
+  - `GET /users`, `GET /users/:id`, `GET /users/tier/:tier`, `POST /users`, `PUT /users/:id`, `DELETE /users/:id`
+- `order-service :3002`
+  - `GET /orders`, `GET /orders/:id`, `GET /orders/user/:userId`, `POST /orders`, `PATCH /orders/:id/status`, `POST /orders/:id/cancel`
+- `payment-service :3003`
+  - `GET /payments`, `GET /payments/:id`, `GET /payments/status/:status`, `POST /payments/authorize`, `POST /payments/:id/refund`
+- `notification-service :3004`
+  - `GET /notifications`, `GET /notifications/:id`, `GET /notifications/user/:userId`, `GET /notifications/order/:orderId`, `POST /notifications/send`
+
 ## Notes
 
 - Shared modules are mounted at `/shared` in service images.
