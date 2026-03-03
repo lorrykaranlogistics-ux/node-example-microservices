@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "private": true,
   "scripts": {
+    "test": "node tests/regression.test.js",
     "start:user": "node user-service/src/server.js",
     "start:order": "node order-service/src/server.js",
     "start:payment": "node payment-service/src/server.js",
