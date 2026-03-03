@@ -6,7 +6,17 @@ const { paymentAuthorizeResponseSchema, validateAgainstSchema } = require('../..
 
 const create = async (req, res) => {
   try {
-    const { userId, cardNumber, amount, currency } = req.body;
+    const {
+      userId,
+      cardNumber,
+      amount,
+      currency,
+      items,
+      shippingAddress,
+      billingAddress,
+      customerNote,
+      couponCode,
+    } = req.body;
 
     const userRes = await request('order-service', 'GET', `http://user-service:3001/users/${userId}`);
     if (!userRes.success) {
@@ -32,6 +42,11 @@ const create = async (req, res) => {
       currency,
       paymentId: paymentRes.data.id,
       transactionRef: paymentRes.data.id,
+      items,
+      shippingAddress,
+      billingAddress,
+      customerNote,
+      couponCode,
     });
 
     await request('order-service', 'POST', 'http://notification-service:3004/notifications/send', buildNotificationPayload(order));

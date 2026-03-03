@@ -8,6 +8,11 @@ const createOrder = (orderInput) => {
     currency: orderInput.currency,
     paymentId: orderInput.paymentId,
     transactionRef: orderInput.transactionRef || null,
+    items: Array.isArray(orderInput.items) ? orderInput.items : [],
+    shippingAddress: orderInput.shippingAddress || null,
+    billingAddress: orderInput.billingAddress || null,
+    customerNote: orderInput.customerNote || null,
+    couponCode: orderInput.couponCode || null,
     status: 'canceled',
   };
   orders.push(order);
