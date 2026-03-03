@@ -18,5 +18,6 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: '20'
+          package-manager-cache: false
       - run: cd sample-microservices-node/${{ matrix.service }} && npm install
       - run: cd sample-microservices-node/${{ matrix.service }} && node -e "require('./src/server.js'); setTimeout(()=>process.exit(0),200)"
