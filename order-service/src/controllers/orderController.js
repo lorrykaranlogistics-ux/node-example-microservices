@@ -6,9 +6,10 @@ const { paymentAuthorizeResponseSchema, validateAgainstSchema } = require('../..
 
 const create = async (req, res) => {
   try {
-    const { userId, cardNumber, amount, currency } = req.body;
+    const { username,userId, cardNumber, amount, currency } = req.body;
 
     const userRes = await request('order-service', 'GET', `http://user-service:3001/users/${userId}`);
+
     if (!userRes.success) {
       return res.status(404).json(fail('user not found'));
     }
@@ -27,6 +28,7 @@ const create = async (req, res) => {
     }
 
     const order = createOrder({
+      username,
       userId,
       amount,
       currency,
