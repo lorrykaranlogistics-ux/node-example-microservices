@@ -1,5 +1,5 @@
 const { validatePayment } = require('../utils/paymentValidator');
-const { createPayment } = require('../models/paymentModel');
+const { createPayment, listPayments, findPayment } = require('../models/paymentModel');
 const { ok, fail } = require('../../../shared/response');
 
 const authorizePayment = (req, res) => {
@@ -12,4 +12,12 @@ const authorizePayment = (req, res) => {
   }
 };
 
-module.exports = { authorizePayment };
+const getPayments = (_req, res) => res.json(ok(listPayments()));
+
+const getPayment = (req, res) => {
+  const payment = findPayment(req.params.id);
+  if (!payment) return res.status(404).json(fail('payment not found'));
+  return res.json(ok(payment));
+};
+
+module.exports = { authorizePayment, getPayments, getPayment };
