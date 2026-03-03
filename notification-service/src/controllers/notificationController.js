@@ -1,5 +1,11 @@
 const { ok, fail } = require('../../../shared/response');
-const { saveNotification, listNotifications, findNotification } = require('../models/notificationModel');
+const {
+  saveNotification,
+  listNotifications,
+  listNotificationsByUser,
+  listNotificationsByOrder,
+  findNotification,
+} = require('../models/notificationModel');
 const { buildMessage } = require('../utils/messageBuilder');
 
 const send = (req, res) => {
@@ -12,6 +18,8 @@ const send = (req, res) => {
 };
 
 const getNotifications = (_req, res) => res.json(ok(listNotifications()));
+const getNotificationsByUser = (req, res) => res.json(ok(listNotificationsByUser(req.params.userId)));
+const getNotificationsByOrder = (req, res) => res.json(ok(listNotificationsByOrder(req.params.orderId)));
 
 const getNotification = (req, res) => {
   const row = findNotification(req.params.id);
@@ -19,4 +27,4 @@ const getNotification = (req, res) => {
   return res.json(ok(row));
 };
 
-module.exports = { send, getNotifications, getNotification };
+module.exports = { send, getNotifications, getNotificationsByUser, getNotificationsByOrder, getNotification };

@@ -9,9 +9,41 @@ const createOrder = async (req, res) => {
   }
 };
 
+const patchOrderStatus = async (req, res) => {
+  try {
+    const data = await request(
+      'api-gateway',
+      'PATCH',
+      `http://order-service:3002/orders/${req.params.id}/status`,
+      req.body,
+    );
+    res.status(data.success ? 200 : 404).json(data);
+  } catch (err) {
+    res.status(502).json({ success: false, error: err.message });
+  }
+};
+
+const cancelOrder = async (req, res) => {
+  try {
+    const data = await request('api-gateway', 'POST', `http://order-service:3002/orders/${req.params.id}/cancel`);
+    res.status(data.success ? 200 : 404).json(data);
+  } catch (err) {
+    res.status(502).json({ success: false, error: err.message });
+  }
+};
+
 const listOrders = async (_req, res) => {
   try {
     const data = await request('api-gateway', 'GET', 'http://order-service:3002/orders');
+    res.json(data);
+  } catch (err) {
+    res.status(502).json({ success: false, error: err.message });
+  }
+};
+
+const listOrdersByUser = async (req, res) => {
+  try {
+    const data = await request('api-gateway', 'GET', `http://order-service:3002/orders/user/${req.params.userId}`);
     res.json(data);
   } catch (err) {
     res.status(502).json({ success: false, error: err.message });
@@ -27,10 +59,37 @@ const getOrder = async (req, res) => {
   }
 };
 
+const createUser = async (req, res) => {
+  try {
+    const data = await request('api-gateway', 'POST', 'http://user-service:3001/users', req.body);
+    res.status(201).json(data);
+  } catch (err) {
+    res.status(502).json({ success: false, error: err.message });
+  }
+};
+
 const listUsers = async (_req, res) => {
   try {
     const data = await request('api-gateway', 'GET', 'http://user-service:3001/users');
     res.json(data);
+  } catch (err) {
+    res.status(502).json({ success: false, error: err.message });
+  }
+};
+
+const listUsersByTier = async (req, res) => {
+  try {
+    const data = await request('api-gateway', 'GET', `http://user-service:3001/users/tier/${req.params.tier}`);
+    res.json(data);
+  } catch (err) {
+    res.status(502).json({ success: false, error: err.message });
+  }
+};
+
+const getUser = async (req, res) => {
+  try {
+    const data = await request('api-gateway', 'GET', `http://user-service:3001/users/${req.params.id}`);
+    res.status(data.success ? 200 : 404).json(data);
   } catch (err) {
     res.status(502).json({ success: false, error: err.message });
   }
@@ -45,6 +104,33 @@ const listPayments = async (_req, res) => {
   }
 };
 
+const listPaymentsByStatus = async (req, res) => {
+  try {
+    const data = await request('api-gateway', 'GET', `http://payment-service:3003/payments/status/${req.params.status}`);
+    res.json(data);
+  } catch (err) {
+    res.status(502).json({ success: false, error: err.message });
+  }
+};
+
+const getPayment = async (req, res) => {
+  try {
+    const data = await request('api-gateway', 'GET', `http://payment-service:3003/payments/${req.params.id}`);
+    res.status(data.success ? 200 : 404).json(data);
+  } catch (err) {
+    res.status(502).json({ success: false, error: err.message });
+  }
+};
+
+const refundPayment = async (req, res) => {
+  try {
+    const data = await request('api-gateway', 'POST', `http://payment-service:3003/payments/${req.params.id}/refund`);
+    res.status(data.success ? 200 : 404).json(data);
+  } catch (err) {
+    res.status(502).json({ success: false, error: err.message });
+  }
+};
+
 const listNotifications = async (_req, res) => {
   try {
     const data = await request('api-gateway', 'GET', 'http://notification-service:3004/notifications');
@@ -54,4 +140,58 @@ const listNotifications = async (_req, res) => {
   }
 };
 
-module.exports = { createOrder, listOrders, getOrder, listUsers, listPayments, listNotifications };
+const listNotificationsByUser = async (req, res) => {
+  try {
+    const data = await request(
+      'api-gateway',
+      'GET',
+      `http://notification-service:3004/notifications/user/${req.params.userId}`,
+    );
+    res.json(data);
+  } catch (err) {
+    res.status(502).json({ success: false, error: err.message });
+  }
+};
+
+const listNotificationsByOrder = async (req, res) => {
+  try {
+    const data = await request(
+      'api-gateway',
+      'GET',
+      `http://notification-service:3004/notifications/order/${req.params.orderId}`,
+    );
+    res.json(data);
+  } catch (err) {
+    res.status(502).json({ success: false, error: err.message });
+  }
+};
+
+const getNotification = async (req, res) => {
+  try {
+    const data = await request('api-gateway', 'GET', `http://notification-service:3004/notifications/${req.params.id}`);
+    res.status(data.success ? 200 : 404).json(data);
+  } catch (err) {
+    res.status(502).json({ success: false, error: err.message });
+  }
+};
+
+module.exports = {
+  createOrder,
+  patchOrderStatus,
+  cancelOrder,
+  listOrders,
+  listOrdersByUser,
+  getOrder,
+  createUser,
+  listUsers,
+  listUsersByTier,
+  getUser,
+  listPayments,
+  listPaymentsByStatus,
+  getPayment,
+  refundPayment,
+  listNotifications,
+  listNotificationsByUser,
+  listNotificationsByOrder,
+  getNotification,
+};
