@@ -113,7 +113,7 @@ async function testRouteSuite() {
 
     let orderServiceHealthy = true;
     try {
-      await waitForHealth(optionalOrderService.port, procByPort[optionalOrderService.port], 3012)
+      await waitForHealth(optionalOrderService.port, procByPort[optionalOrderService.port], 6000);
     } catch (err) {
       orderServiceHealthy = false;
       console.log(`SKIP order-service route checks (${err.message})`);

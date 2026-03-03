@@ -5,5 +5,6 @@ COPY user-service/package.json ./package.json
 RUN npm install
 COPY user-service/src ./src
 COPY shared /shared
+COPY contracts /contracts
 EXPOSE 3001
 CMD ["npm", "start"]

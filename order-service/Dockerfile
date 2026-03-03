@@ -5,5 +5,6 @@ COPY order-service/package.json ./package.json
 RUN npm install
 COPY order-service/src ./src
 COPY shared /shared
+COPY contracts /contracts
 EXPOSE 3002
 CMD ["npm", "start"]

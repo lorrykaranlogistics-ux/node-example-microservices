@@ -11,6 +11,13 @@ cd microservices-project
 docker compose up --build
 ```
 
+## Quick Start
+
+```bash
+./bootstrap.sh
+./healthcheck.sh
+```
+
 ## Services
 
 - `api-gateway` on 3000
@@ -31,3 +38,11 @@ curl -s -X POST http://localhost:3000/api/orders \
 
 - Shared modules are mounted at `/shared` in service images.
 - Service logs are JSON-formatted for easier parsing in centralized logging systems.
+
+## Contract Strategy (Order <-> Payment)
+
+- Versioned contracts are stored in `contracts/payment/v1/`.
+- Provider validation: `payment-service` validates both request and response against contract schemas.
+- Consumer validation: `order-service` validates `payment-service` response shape before creating orders.
+- CI gate: `.github/workflows/contracts.yml` runs `npm run test:contracts` on PRs that touch order/payment/contracts.
+- Breaking changes must introduce a new contract version (for example `contracts/payment/v2/`) and migration plan.

@@ -1,11 +1,27 @@
 const { validatePayment } = require('../utils/paymentValidator');
 const { createPayment, listPayments, findPayment } = require('../models/paymentModel');
 const { ok, fail } = require('../../../shared/response');
+const {
+  paymentAuthorizeRequestSchema,
+  paymentAuthorizeResponseSchema,
+  validateAgainstSchema,
+} = require('../../../shared/contractSchemas');
 
 const authorizePayment = (req, res) => {
   try {
+    const requestErrors = validateAgainstSchema(req.body || {}, paymentAuthorizeRequestSchema);
+    if (requestErrors.length > 0) {
+      return res.status(400).json(fail(`payment request contract mismatch: ${requestErrors.join('; ')}`));
+    }
+
     const { parsedAmount } = validatePayment(req.body);
     const payment = createPayment({ ...req.body, amount: parsedAmount });
+
+    const responseErrors = validateAgainstSchema(payment, paymentAuthorizeResponseSchema);
+    if (responseErrors.length > 0) {
+      return res.status(500).json(fail(`payment response contract mismatch: ${responseErrors.join('; ')}`));
+    }
+
     return res.status(201).json(ok(payment));
   } catch (err) {
     return res.status(400).json(fail(err.message));

@@ -1,0 +1,32 @@
+name: contracts-ci
+
+on:
+  pull_request:
+    paths:
+      - "contracts/**"
+      - "shared/contractSchemas.js"
+      - "order-service/**"
+      - "payment-service/**"
+      - "tests/contract.test.js"
+      - "package.json"
+  push:
+    branches: [main, master]
+    paths:
+      - "contracts/**"
+      - "shared/contractSchemas.js"
+      - "order-service/**"
+      - "payment-service/**"
+      - "tests/contract.test.js"
+      - "package.json"
+
+jobs:
+  contract-validation:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          package-manager-cache: false
+      - name: Run provider/consumer contract tests
+        run: npm run test:contracts

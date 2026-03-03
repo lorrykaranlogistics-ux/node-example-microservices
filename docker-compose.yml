@@ -1,25 +1,33 @@
 version: '3.9'
 services:
   user-service:
-    build: ./user-service
+    build:
+      context: .
+      dockerfile: user-service/Dockerfile
     container_name: user-service
     ports:
       - "3001:3001"
 
   payment-service:
-    build: ./payment-service
+    build:
+      context: .
+      dockerfile: payment-service/Dockerfile
     container_name: payment-service
     ports:
       - "3003:3003"
 
   notification-service:
-    build: ./notification-service
+    build:
+      context: .
+      dockerfile: notification-service/Dockerfile
     container_name: notification-service
     ports:
       - "3004:3004"
 
   order-service:
-    build: ./order-service
+    build:
+      context: .
+      dockerfile: order-service/Dockerfile
     container_name: order-service
     ports:
       - "3002:3002"
@@ -29,7 +37,9 @@ services:
       - notification-service
 
   api-gateway:
-    build: ./api-gateway
+    build:
+      context: .
+      dockerfile: api-gateway/Dockerfile
     container_name: api-gateway
     ports:
       - "3000:3000"
