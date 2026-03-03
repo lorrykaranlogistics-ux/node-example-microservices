@@ -7,7 +7,7 @@
 # docker compose up --build
 
 # If running microservices-only:
-cd sample-microservices-node
+cd microservices-project
 docker compose up --build
 ```
 
