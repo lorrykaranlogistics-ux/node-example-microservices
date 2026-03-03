@@ -2,10 +2,30 @@ name: microservices-ci
 on:
   push:
     paths:
-      - 'node-example-microservices/**'
+      - 'api-gateway/**'
+      - 'user-service/**'
+      - 'order-service/**'
+      - 'payment-service/**'
+      - 'notification-service/**'
+      - 'shared/**'
+      - 'contracts/**'
+      - 'tests/**'
+      - '.github/workflows/**'
+      - 'package.json'
+      - 'package-lock.json'
   pull_request:
     paths:
-      - 'node-example-microservices/**'
+      - 'api-gateway/**'
+      - 'user-service/**'
+      - 'order-service/**'
+      - 'payment-service/**'
+      - 'notification-service/**'
+      - 'shared/**'
+      - 'contracts/**'
+      - 'tests/**'
+      - '.github/workflows/**'
+      - 'package.json'
+      - 'package-lock.json'
 
 jobs:
   build:
@@ -19,19 +39,5 @@ jobs:
         with:
           node-version: '20'
           package-manager-cache: false
-      - run: |
-          if [ -d "sample-microservices-node/${{ matrix.service }}" ]; then
-            BASE_DIR="sample-microservices-node"
-          else
-            BASE_DIR="."
-          fi
-          cd "$BASE_DIR/${{ matrix.service }}"
-          npm install
-      - run: |
-          if [ -d "sample-microservices-node/${{ matrix.service }}" ]; then
-            BASE_DIR="sample-microservices-node"
-          else
-            BASE_DIR="."
-          fi
-          cd "$BASE_DIR/${{ matrix.service }}"
-          node -e "require('./src/server.js'); setTimeout(()=>process.exit(0),200)"
+      - run: cd "${{ matrix.service }}" && npm install
+      - run: cd "${{ matrix.service }}" && node -e "require('./src/server.js'); setTimeout(()=>process.exit(0),200)"

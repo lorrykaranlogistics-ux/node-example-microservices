@@ -26,24 +26,14 @@ jobs:
 
       - name: Install service dependencies
         run: |
-          if [ -d "sample-microservices-node/api-gateway" ]; then
-            BASE_DIR="sample-microservices-node"
-          else
-            BASE_DIR="."
-          fi
           for service in api-gateway user-service order-service payment-service notification-service; do
-            cd "$BASE_DIR/$service"
+            cd "$service"
             npm install
             cd -
           done
 
       - name: Run regression test suite
-        run: |
-          if [ -f "sample-microservices-node/tests/regression.test.js" ]; then
-            node sample-microservices-node/tests/regression.test.js
-          else
-            node tests/regression.test.js
-          fi
+        run: node tests/regression.test.js
 
       - name: Add run summary
         run: |
