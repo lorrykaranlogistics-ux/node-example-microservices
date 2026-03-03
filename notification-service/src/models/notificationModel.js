@@ -6,4 +6,7 @@ const saveNotification = (payload) => {
   return row;
 };
 
-module.exports = { saveNotification };
+const listNotifications = () => records;
+const findNotification = (id) => records.find((n) => n.id === id);
+
+module.exports = { saveNotification, listNotifications, findNotification };

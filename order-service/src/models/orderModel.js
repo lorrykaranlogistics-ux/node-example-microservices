@@ -14,4 +14,13 @@ const createOrder = (orderInput) => {
   return order;
 };
 
-module.exports = { createOrder };
+const listOrders = () => orders;
+const findOrder = (id) => orders.find((o) => o.id === id);
+const updateOrderStatus = (id, status) => {
+  const order = findOrder(id);
+  if (!order) return null;
+  order.status = status;
+  return order;
+};
+
+module.exports = { createOrder, listOrders, findOrder, updateOrderStatus };

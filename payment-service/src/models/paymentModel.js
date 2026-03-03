@@ -6,4 +6,7 @@ const createPayment = (payment) => {
   return row;
 };
 
-module.exports = { createPayment };
+const listPayments = () => payments;
+const findPayment = (id) => payments.find((p) => p.id === id);
+
+module.exports = { createPayment, listPayments, findPayment };

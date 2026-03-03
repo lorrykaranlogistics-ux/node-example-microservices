@@ -5,15 +5,18 @@ on:
     inputs:
       pr_number:
         description: "Pull request number used for traceability"
-        required: false
+        required: true
         type: string
 
 jobs:
   regression:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout
+      - name: Checkout PR head branch
         uses: actions/checkout@v4
+        with:
+          ref: refs/pull/${{ github.event.inputs.pr_number }}/head
+          fetch-depth: 1
 
       - name: Setup Node
         uses: actions/setup-node@v4
@@ -23,15 +26,26 @@ jobs:
 
       - name: Install service dependencies
         run: |
+          if [ -d "sample-microservices-node/api-gateway" ]; then
+            BASE_DIR="sample-microservices-node"
+          else
+            BASE_DIR="."
+          fi
           for service in api-gateway user-service order-service payment-service notification-service; do
-            cd sample-microservices-node/$service
+            cd "$BASE_DIR/$service"
             npm install
             cd -
           done
 
       - name: Run regression test suite
-        run: node sample-microservices-node/tests/regression.test.js
+        run: |
+          if [ -f "sample-microservices-node/tests/regression.test.js" ]; then
+            node sample-microservices-node/tests/regression.test.js
+          else
+            node tests/regression.test.js
+          fi
 
       - name: Add run summary
         run: |
           echo "Regression workflow triggered for PR: ${{ github.event.inputs.pr_number || 'n/a' }}" >> $GITHUB_STEP_SUMMARY
+          echo "Checked out ref: refs/pull/${{ github.event.inputs.pr_number }}/head" >> $GITHUB_STEP_SUMMARY
