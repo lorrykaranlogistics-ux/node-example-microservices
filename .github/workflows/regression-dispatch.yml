@@ -1,0 +1,37 @@
+name: microservices-regression-dispatch
+
+on:
+  workflow_dispatch:
+    inputs:
+      pr_number:
+        description: "Pull request number used for traceability"
+        required: false
+        type: string
+
+jobs:
+  regression:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          package-manager-cache: false
+
+      - name: Install service dependencies
+        run: |
+          for service in api-gateway user-service order-service payment-service notification-service; do
+            cd sample-microservices-node/$service
+            npm install
+            cd -
+          done
+
+      - name: Run regression test suite
+        run: node sample-microservices-node/tests/regression.test.js
+
+      - name: Add run summary
+        run: |
+          echo "Regression workflow triggered for PR: ${{ github.event.inputs.pr_number || 'n/a' }}" >> $GITHUB_STEP_SUMMARY

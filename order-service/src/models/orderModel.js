@@ -8,7 +8,7 @@ const createOrder = (orderInput) => {
     currency: orderInput.currency,
     paymentId: orderInput.paymentId,
     transactionRef: orderInput.transactionRef || null,
-    status: 'CONFIRMED',
+    status: 'canceled',
   };
   orders.push(order);
   return order;
