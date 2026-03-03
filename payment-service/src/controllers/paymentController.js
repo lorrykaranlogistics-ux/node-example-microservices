@@ -1,5 +1,5 @@
 const { validatePayment } = require('../utils/paymentValidator');
-const { createPayment, listPayments, findPayment } = require('../models/paymentModel');
+const { createPayment, listPayments, listPaymentsByStatus, findPayment, updatePaymentStatus } = require('../models/paymentModel');
 const { ok, fail } = require('../../../shared/response');
 const {
   paymentAuthorizeRequestSchema,
@@ -29,6 +29,7 @@ const authorizePayment = (req, res) => {
 };
 
 const getPayments = (_req, res) => res.json(ok(listPayments()));
+const getPaymentsByStatus = (req, res) => res.json(ok(listPaymentsByStatus(req.params.status)));
 
 const getPayment = (req, res) => {
   const payment = findPayment(req.params.id);
@@ -36,4 +37,10 @@ const getPayment = (req, res) => {
   return res.json(ok(payment));
 };
 
-module.exports = { authorizePayment, getPayments, getPayment };
+const refundPayment = (req, res) => {
+  const payment = updatePaymentStatus(req.params.id, 'REFUNDED');
+  if (!payment) return res.status(404).json(fail('payment not found'));
+  return res.json(ok(payment));
+};
+
+module.exports = { authorizePayment, getPayments, getPaymentsByStatus, getPayment, refundPayment };
