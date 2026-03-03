@@ -5,5 +5,6 @@ COPY payment-service/package.json ./package.json
 RUN npm install
 COPY payment-service/src ./src
 COPY shared /shared
+COPY contracts /contracts
 EXPOSE 3003
 CMD ["npm", "start"]

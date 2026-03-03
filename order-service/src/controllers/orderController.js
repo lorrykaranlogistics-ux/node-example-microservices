@@ -2,6 +2,7 @@ const { request } = require('../../../shared/httpClient');
 const { ok, fail } = require('../../../shared/response');
 const { createOrder, listOrders, findOrder, updateOrderStatus } = require('../models/orderModel');
 const { buildNotificationPayload } = require('../utils/orderUtils');
+const { paymentAuthorizeResponseSchema, validateAgainstSchema } = require('../../../shared/contractSchemas');
 
 const create = async (req, res) => {
   try {
@@ -17,6 +18,13 @@ const create = async (req, res) => {
       amount,
       currency,
     });
+    if (!paymentRes.success) {
+      return res.status(502).json(fail('payment service failed'));
+    }
+    const responseErrors = validateAgainstSchema(paymentRes.data || {}, paymentAuthorizeResponseSchema);
+    if (responseErrors.length > 0) {
+      return res.status(502).json(fail(`payment response contract mismatch: ${responseErrors.join('; ')}`));
+    }
 
     const order = createOrder({
       userId,
